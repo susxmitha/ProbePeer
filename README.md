@@ -162,17 +162,6 @@ Honest engineering means saying what the tool does *not* do yet.
 - [ ] Citation-verification checks against retrieved metadata
 - [ ] Exportable plan-and-results audit report
 
-## 🤝 Contributing
-
-Contributions, issues, and ideas are welcome.
-
-1. Fork the repository
-2. Create a branch: `git checkout -b feature/your-feature`
-3. Commit your changes and run `npm run test`
-4. Open a pull request describing what you changed and why
-
-Found a bug or have a feature idea? [Open an issue](https://github.com/susxmitha/ProbePeer/issues).
-
 ## 📄 License
 
 Released under the [MIT License](LICENSE).
