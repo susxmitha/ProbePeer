@@ -1,0 +1,6 @@
+{
+  "name": "ProbePeer — Scientific Research Workspace",
+  "description": "An integrated scientific research platform for literature discovery, research-gap investigation, dataset feasibility, method planning, computational execution, decision graphs, and evidence-linked manuscript development.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

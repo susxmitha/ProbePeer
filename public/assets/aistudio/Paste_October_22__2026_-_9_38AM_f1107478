@@ -1,0 +1,888 @@
+# MASTER BUILD SPECIFICATION — PROBEPEER
+
+You are the lead product architect, senior full-stack engineer, AI systems engineer, scientific-computing engineer, security engineer, and product designer responsible for building **ProbePeer**, a complete, integrated, deployable AI-powered research platform.
+
+Do not build a landing-page mockup, a chatbot demo, a static dashboard, or a collection of disconnected AI tools. Build a coherent, functional web application with persistent data, real integrations, meaningful workflows, robust error handling, and a professional interface.
+
+Work directly in the existing Google AI Studio Build environment. Inspect the available runtime, use supported integrations, create the necessary files, run the application, fix errors, and verify functionality.
+
+If the full specification exceeds what can safely be implemented in one pass, build the strongest complete vertical slice first and continue implementing the remaining modules in subsequent iterations. Never represent a placeholder as a working feature.
+
+---
+
+# 1. PRODUCT VISION
+
+## Product name
+
+ProbePeer
+
+## Product category
+
+An integrated scientific research workspace combining:
+
+1. Scientific discovery and research-gap investigation.
+2. Research-question development and novelty assessment.
+3. Dataset discovery and feasibility evaluation.
+4. Research design, statistical methods, and analysis planning.
+5. Code generation, computational execution, debugging, and validation.
+6. Persistent project management and research history.
+7. Evidence-linked manuscript development.
+8. Reproducibility, collaboration, and exportable research artifacts.
+
+## Mission
+
+Help researchers progress from an uncertain research idea to a defensible, reproducible, well-documented body of scientific work.
+
+The platform should help researchers answer:
+
+- Is this research question meaningfully different from existing work?
+- What evidence supports or contradicts the proposed research gap?
+- Can an accessible dataset genuinely answer the question?
+- Which study design, statistical tests, baselines, and validation procedures are appropriate?
+- Are the results computationally correct, statistically defensible, robust, and scientifically meaningful?
+- Can every result and manuscript claim be traced back to its underlying evidence?
+- Can the complete project be recovered, inspected, and rerun without losing decisions or intermediate work?
+
+## Target users
+
+Initially support computational researchers, postgraduate students, research engineers, PhD candidates, and interdisciplinary researchers working with public datasets.
+
+Design the architecture so that future modules can support computational biology, neuroscience, biomedical research, engineering, and other scientific domains.
+
+## Product principle
+
+ProbePeer must not replace scientific judgment. It must improve the quality, transparency, and continuity of that judgment.
+
+Never claim a research question is novel merely because a search did not find an identical paper. Never label a scientific claim proven simply because code executed successfully.
+
+---
+
+# 2. REQUIRED TECHNOLOGY STACK
+
+Use the following stack unless a genuine incompatibility in the Google AI Studio environment requires a documented alternative.
+
+## Application and interface
+
+- React and TypeScript.
+- A modern, responsive component architecture.
+- Tailwind CSS for styling.
+- Accessible UI primitives such as Radix UI where useful.
+- Lucide icons.
+- A restrained design-token system.
+- React Router or an equivalent reliable routing solution.
+- React Hook Form and Zod for form state and validation.
+
+Do not use a large component framework that forces the entire application into a generic template aesthetic.
+
+## Backend
+
+- Node.js with TypeScript.
+- A server-side API with clear route and service boundaries.
+- Firebase Authentication for sign-in.
+- Cloud Firestore for persistent application data.
+- Cloud Storage for uploaded papers, datasets, and generated artifacts.
+- Cloud Run for deployment where supported by the current AI Studio environment.
+- Background jobs or a separate worker service for longer-running research and analysis tasks.
+
+Use the framework and runtime actually supported by AI Studio. If its generated project uses a different supported React setup, preserve that setup rather than introducing an unnecessary migration.
+
+## AI
+
+- Gemini API for structured reasoning, literature synthesis, method planning, code proposals, and manuscript drafting.
+- Use server-side API calls for operations requiring private credentials.
+- Use structured JSON outputs and validated schemas for important workflows.
+- Use function calling or a controlled tool registry for actions such as searching papers, inspecting datasets, running approved analyses, and exporting artifacts.
+- Validate all model-generated structured data before using it.
+
+Never let a language model invent a successful tool result, fabricate a citation, or silently mark an uncompleted operation as complete.
+
+## Scholarly information sources
+
+Implement source adapters for:
+
+- Crossref REST API for bibliographic metadata.
+- OpenAlex API for scholarly works, authors, institutions, topics, and citation relationships.
+- Semantic Scholar API where access and quotas permit.
+- arXiv API for relevant preprints.
+- Open-access full-text sources and public research repositories where their licensing and terms permit.
+
+Prefer stable identifiers such as DOI, arXiv ID, and repository identifiers.
+
+Clearly distinguish bibliographic metadata, abstracts, full-text evidence, and information inferred by AI.
+
+Do not scrape restricted full text or bypass access controls. Respect API rate limits, publisher restrictions, dataset licenses, and attribution requirements.
+
+## Data analysis
+
+- Python for scientific analysis.
+- pandas and NumPy for tabular data.
+- SciPy and statsmodels for appropriate statistical procedures.
+- scikit-learn for supported machine-learning workflows.
+- Matplotlib for plots.
+- pytest for analysis tests.
+
+Keep the execution service separate from the main web application. Use an isolated worker with CPU, memory, runtime, filesystem, and network restrictions.
+
+Do not execute arbitrary generated Python code inside the application server.
+
+If the execution service cannot be configured immediately, implement the execution interface and job state machine, but visibly label execution as unavailable until a real, isolated worker is connected.
+
+## Manuscript and artifact generation
+
+- Markdown as the canonical editable manuscript representation initially.
+- Citation metadata with stable source identifiers.
+- Export to Markdown and PDF.
+- DOCX export if a reliable implementation is available.
+- JSON project manifest.
+- Downloadable source code, logs, configuration, result tables, and figures.
+
+Ensure generated manuscript sections are derived from actual recorded research artifacts, not fabricated summaries.
+
+## Versioning and quality
+
+- GitHub-compatible project structure.
+- Automated unit and integration tests.
+- ESLint and TypeScript checking.
+- Database security rules.
+- Environment-variable configuration.
+- Clear deployment documentation.
+
+Keep dependencies maintained and compatible. Do not invent package names or use deprecated APIs without a documented reason.
+
+---
+
+# 3. PRODUCT DESIGN AND VISUAL IDENTITY
+
+The interface is a critical requirement.
+
+The product must look like a mature, well-designed scientific software platform created by a highly skilled product-design team.
+
+Use ChatGPT's conversational simplicity and Claude's restrained workspace aesthetic as inspiration for usability, not as interfaces to copy.
+
+## Visual direction
+
+- Minimal.
+- Professional.
+- Quietly sophisticated.
+- Research-oriented.
+- Typography-led.
+- Clean and highly readable.
+- Consistent across all pages.
+- Functional rather than decorative.
+
+Use a light theme by default with warm off-white backgrounds, white or subtly differentiated work surfaces, charcoal text, neutral gray borders, and one restrained accent color such as muted indigo.
+
+Provide a coherent dark theme if it can be implemented without compromising the light-theme experience.
+
+Use subtle borders, carefully controlled spacing, modest corner radii, and restrained shadows.
+
+Use a high-quality sans-serif typeface, clear hierarchy, readable scientific tables, and consistent iconography.
+
+## Strictly avoid
+
+- Excessive gradients.
+- Giant decorative hero sections inside the application.
+- Floating glassmorphism cards everywhere.
+- Random accent colors.
+- Emojis as the primary icon system.
+- Excessive rounded rectangles.
+- Unnecessary illustrations.
+- Constant animations.
+- Dense, overwhelming dashboards.
+- Generic AI-generated SaaS templates.
+- Repeated cards containing identical placeholder content.
+- Fake charts or fabricated activity metrics.
+- Excessive use of badges.
+- A chatbot occupying the entire interface at the expense of the research workspace.
+
+Use animation only when it clarifies a real state transition.
+
+## Main application layout
+
+Create a persistent, collapsible left sidebar with:
+
+- ProbePeer logo and wordmark.
+- New research project.
+- Home.
+- My projects.
+- Discovery.
+- Literature.
+- Datasets.
+- Analysis and verification.
+- Manuscripts.
+- Shared projects, when collaboration is enabled.
+- Settings.
+
+The main content area should be wide, calm, and task-focused.
+
+Use a contextual right panel only when helpful for source evidence, method explanations, validation details, or artifact provenance.
+
+On small screens, use a functional responsive navigation pattern.
+
+## Landing and dashboard experience
+
+The authenticated home page should feel like a research workspace, not a marketing website.
+
+Include:
+
+- A concise greeting or project prompt.
+- A prominent field: "What are you trying to investigate?"
+- A secondary action to upload a paper or dataset.
+- Recent research projects.
+- Clearly presented project statuses.
+- A small, useful recent-activity section.
+
+Do not display invented statistics such as total researchers, successful experiments, papers processed, or time saved.
+
+If the user has no projects, show an elegant empty state with a single clear call to action.
+
+## Research workspace
+
+Every project should have its own persistent workspace.
+
+Use project navigation tabs or a similarly restrained navigation system:
+
+- Overview.
+- Research question.
+- Evidence.
+- Dataset.
+- Methods.
+- Analysis.
+- Validation.
+- Manuscript.
+- History and provenance.
+
+Keep the current project and its status visible. Allow users to navigate between stages without losing unsaved work.
+
+## Chat and AI interaction
+
+Use a conversational panel for instructions, questions, and AI assistance, but keep important work in structured workspace views.
+
+AI responses should be concise by default and expandable for deeper explanations.
+
+Citations, analysis results, code, and validation reports must render as meaningful structured objects rather than giant blocks of prose.
+
+Every AI-proposed action must be distinguishable from an action that has actually executed.
+
+---
+
+# 4. CORE MODULE: RESEARCH PROJECT MANAGEMENT
+
+Implement a persistent project system.
+
+Users must be able to:
+
+- Create, rename, archive, reopen, and delete their own projects.
+- Enter a research question, hypothesis, intended contribution, and scientific domain.
+- Upload relevant papers and datasets.
+- Save notes and decisions.
+- Track tasks and project status.
+- View a chronological activity history.
+- Return to a project after signing out and signing in again.
+- Export a project archive.
+- Recover from refreshes, interruptions, and failed AI operations without losing previously saved work.
+
+Use explicit project states such as:
+
+Draft, Investigating, Planning, Ready for Analysis, Analyzing, Needs Review, and Archived.
+
+Do not advance a project automatically merely because an AI response was generated.
+
+Require explicit user confirmation for consequential research decisions.
+
+Implement autosave with clear saved, saving, and failed-to-save states.
+
+Keep revision history for important research objects.
+
+---
+
+# 5. CORE MODULE: SCIENTIFIC DISCOVERY AND RESEARCH-GAP ANALYSIS
+
+This module must investigate existing research rather than generate unsupported claims of novelty.
+
+## User input
+
+Allow the researcher to provide:
+
+- A research topic.
+- A candidate research question.
+- An optional hypothesis.
+- Scientific domain.
+- Target population or system.
+- Intended contribution.
+- Relevant constraints.
+
+## Literature retrieval
+
+Implement actual API integrations.
+
+For each source, preserve:
+
+- Title.
+- Authors when available.
+- Publication year.
+- DOI or stable identifier.
+- Abstract or accessible text.
+- Journal or venue where available.
+- Source URL.
+- Access status.
+- Retrieval timestamp.
+- Relevant extracted passages when available.
+
+Provide deduplication by DOI, stable identifier, and normalized title where appropriate.
+
+Display search errors, missing metadata, and unavailable full text honestly.
+
+## Evidence matrix
+
+Organize retrieved literature into a structured matrix with:
+
+- Research question.
+- Population or system studied.
+- Data and methods.
+- Main reported findings.
+- Limitations reported by the authors.
+- Relationship to the user's proposed question.
+- Contradictory or supporting evidence.
+- Source and evidence location.
+- Extraction confidence and unresolved ambiguities.
+
+Do not present AI-extracted statements as verified facts without access to supporting evidence.
+
+## Candidate research gaps
+
+Generate multiple candidate research gaps only after reviewing retrieved evidence.
+
+For each candidate, provide:
+
+1. Precise statement of the possible gap.
+2. Supporting sources.
+3. Contradictory or overlapping work.
+4. What appears to be known.
+5. What remains uncertain.
+6. Why the gap might matter.
+7. What evidence would invalidate the proposed gap.
+8. A possible research question.
+9. The next search or verification step.
+
+Clearly distinguish a documented gap reported by a paper from a gap inferred by the model.
+
+Never claim "first-ever", "completely novel", or "no previous research exists" based on a limited search.
+
+Show the search strategy, databases searched, date of retrieval, queries, and coverage limitations.
+
+Allow users to edit and approve candidate gaps.
+
+---
+
+# 6. CORE MODULE: DATASET DISCOVERY AND FEASIBILITY
+
+The platform must distinguish finding a dataset from establishing that it can answer a research question.
+
+## Dataset sources
+
+Start with appropriate public dataset catalogues and repositories. Use official APIs where available and respect access policies.
+
+Allow CSV uploads and supported structured files.
+
+Do not claim to support a repository unless its connector actually works.
+
+## Dataset inspection
+
+For uploaded CSV data, implement:
+
+- Row and column counts.
+- Column names and inferred types.
+- Missingness.
+- Duplicate rows.
+- Basic distributions.
+- Potentially invalid values.
+- Candidate target and predictor variables.
+- Potential leakage indicators.
+- Data-quality warnings.
+
+Never expose private uploaded data through public endpoints.
+
+## Feasibility report
+
+For every candidate dataset, explain:
+
+- What the dataset measures.
+- Population and collection context when documented.
+- Which variables are relevant.
+- Whether the outcome of interest is measurable.
+- Sample-size considerations.
+- Missing-data concerns.
+- Potential confounders.
+- Selection bias and measurement limitations.
+- Availability, licensing, and access restrictions.
+- Which claims the dataset can and cannot support.
+
+Do not recommend a dataset merely because its title matches the research topic.
+
+Save the selected dataset and the rationale for selecting it as part of the research history.
+
+---
+
+# 7. CORE MODULE: METHODS AND ANALYSIS PLANNING
+
+Generate a structured, editable analysis plan from the approved research question and dataset.
+
+The plan must identify:
+
+- Primary hypothesis or research objective.
+- Study design.
+- Unit of analysis.
+- Independent, dependent, and relevant covariate variables.
+- Primary outcome.
+- Secondary outcomes where appropriate.
+- Proposed method or statistical test.
+- Why the method fits the data and research question.
+- Required assumptions.
+- Diagnostic checks.
+- Effect-size and uncertainty reporting.
+- Relevant baseline or comparator.
+- Sensitivity and robustness analyses.
+- Multiple-testing considerations where applicable.
+- Missing-data handling.
+- Validation strategy.
+- Known limitations.
+- Conditions under which the analysis should not proceed.
+
+For machine-learning work, consider appropriate train/validation/test separation, data leakage, baseline models, suitable metrics, uncertainty, and generalization.
+
+For statistical studies, choose methods based on study design, data type, distributional assumptions, dependence structure, and the actual scientific question.
+
+Do not default to a t-test, correlation, regression, or any other method without checking its suitability.
+
+If essential design information is missing, ask for it or explicitly identify the unresolved assumption.
+
+Distinguish exploratory analysis from confirmatory analysis.
+
+Allow researchers to approve and freeze a primary analysis plan before execution. Record later changes and their reasons rather than overwriting the original plan.
+
+Do not claim a result is scientifically impactful solely because a metric is statistically significant or numerically impressive.
+
+---
+
+# 8. CORE MODULE: EXECUTION, VALIDATION, AND ERROR DETECTION
+
+Build a real execution workflow for supported computational tasks.
+
+## Job lifecycle
+
+Implement a job state machine:
+
+Queued → Running → Completed, Failed, Timed Out, or Cancelled.
+
+Persist every state transition and associate every run with a project, code version, configuration, inputs, and outputs.
+
+Show actual logs, errors, duration, and generated artifacts.
+
+## Execution safety
+
+Run Python code in an isolated worker service, not the main Node.js server.
+
+Apply:
+
+- CPU and memory limits.
+- Runtime limits.
+- Restricted filesystem access.
+- Network restrictions.
+- Dependency allowlists.
+- Input and output validation.
+- File-size limits.
+- User authorization.
+- Cancellation support where feasible.
+
+Never execute uploaded scripts or repository code automatically without an explicit execution workflow and appropriate safeguards.
+
+## Verification pipeline
+
+Implement supported checks such as:
+
+- Input schema validation.
+- Data-quality assertions.
+- Repeated-run checks.
+- Expected output validation.
+- Numerical tolerance checks.
+- Statistical assumption diagnostics where appropriate.
+- Comparison against a documented reference result when available.
+- Tests for common data-processing errors.
+- Detection of discrepancies between recorded outputs and manuscript claims.
+
+Record the check performed, its input, result, timestamp, and status.
+
+Use clear statuses:
+
+- Passed.
+- Failed.
+- Warning.
+- Not run.
+- Inconclusive.
+
+A successful program run must not automatically imply scientific validity.
+
+When a check fails, preserve the original run and create a new version for any correction. Never erase failures to make the project appear successful.
+
+If the execution worker has not been configured, clearly state that real execution is unavailable. Never simulate a successful execution and present it as real.
+
+---
+
+# 9. CORE MODULE: THE RESEARCH DECISION GRAPH
+
+This is a central architectural feature.
+
+Represent the research project as a graph of versioned objects and relationships.
+
+Node types should include:
+
+- Research questions.
+- Hypotheses.
+- Literature sources.
+- Evidence statements.
+- Candidate gaps.
+- Datasets.
+- Variables.
+- Analysis plans.
+- Methods.
+- Code versions.
+- Execution runs.
+- Validation checks.
+- Results.
+- Figures and tables.
+- Manuscript sections.
+- Conclusions.
+
+Relationship types should include:
+
+- Supports.
+- Contradicts.
+- Derived from.
+- Depends on.
+- Executed as.
+- Validated by.
+- Reported in.
+- Supersedes.
+- Requires review.
+
+Use stable IDs for nodes and relationships.
+
+If a dataset, method, result, or evidence statement changes, identify dependent downstream objects that may need review.
+
+Do not automatically rewrite scientific conclusions without showing the change and asking the researcher to approve it.
+
+Create a useful project-history interface that lets users inspect prior decisions, failed attempts, and revisions.
+
+Keep the graph data model separate from its visual representation so the application can scale beyond a single graph component.
+
+---
+
+# 10. CORE MODULE: MANUSCRIPT GENERATION
+
+Provide an editable manuscript workspace.
+
+Support sections such as:
+
+- Title.
+- Abstract.
+- Introduction.
+- Related work.
+- Research gap and contribution.
+- Methods.
+- Results.
+- Discussion.
+- Limitations.
+- Conclusion.
+- References.
+
+Generate manuscript content from the actual saved research record.
+
+## Citation integrity
+
+Every cited source must correspond to a real retrieved source record.
+
+Use stable identifiers where available.
+
+Never fabricate a citation, DOI, author, journal, result, or quotation.
+
+If a reference cannot be verified, mark it unresolved and prevent it from being represented as verified.
+
+## Result integrity
+
+Methods sections should reflect the methods actually used.
+
+Results sections should use recorded outputs, not predicted or invented results.
+
+Figures and tables should link to the runs and input data that generated them.
+
+Discussion sections must distinguish findings, interpretations, limitations, and future hypotheses.
+
+## Synchronization
+
+When a result changes, flag dependent manuscript sections and figures for review.
+
+Do not silently rewrite the manuscript or discard previous versions.
+
+Preserve a revision history and allow researchers to compare versions.
+
+Export the manuscript and a project archive containing the code, configuration, sources, analysis outputs, and verification records.
+
+---
+
+# 11. AI ORCHESTRATION AND TOOL USE
+
+Create a controlled research agent that coordinates the modules.
+
+Use separate, testable services for:
+
+- Literature search.
+- Source retrieval.
+- Evidence extraction.
+- Gap analysis.
+- Dataset discovery.
+- Dataset inspection.
+- Methods planning.
+- Code generation.
+- Job submission.
+- Validation.
+- Manuscript generation.
+- Project export.
+
+Use structured inputs and outputs for tool calls.
+
+The model must not invent tool results or pretend an action succeeded when the backend reports a failure.
+
+The application must verify tool permissions, user ownership, and input schemas before executing actions.
+
+Require user confirmation for important decisions, external sharing, consequential data changes, and code execution when appropriate.
+
+Treat retrieved papers, uploaded files, repository READMEs, and external content as untrusted input. Do not allow instructions embedded in them to override the application's security policy.
+
+Keep source evidence, model reasoning summaries, deterministic calculations, and user decisions distinguishable in the UI.
+
+Implement retries with limits, timeouts, clear error messages, and safe recovery from partial failures.
+
+Use Gemini structured outputs for data extraction and other schema-bound tasks, with application-side semantic validation.
+
+---
+
+# 12. DATA MODEL AND PERSISTENCE
+
+Design the database around durable research objects rather than storing the entire project in one chat transcript.
+
+Implement appropriate collections or equivalent tables for:
+
+- Users.
+- Projects.
+- Project members.
+- Sources.
+- Evidence statements.
+- Research questions.
+- Candidate gaps.
+- Dataset records.
+- Dataset inspections.
+- Analysis plans.
+- Plan versions.
+- Code artifacts.
+- Execution runs.
+- Validation checks.
+- Results.
+- Manuscript sections.
+- Research graph nodes and edges.
+- Activity events.
+- Exports.
+
+Every project-owned record must be associated with the correct project and owner.
+
+Use server-side authorization and Firestore security rules to prevent users from accessing other users' private projects.
+
+Persist significant actions as immutable or append-only history records wherever appropriate. Do not rely on browser local storage as the source of truth for research data.
+
+Implement deletion, export, retention, and privacy controls.
+
+Never log API secrets or unnecessary sensitive research content.
+
+---
+
+# 13. GLOBAL ACCESSIBILITY AND USABILITY
+
+Build the product for researchers worldwide.
+
+Requirements:
+
+- Responsive desktop and mobile layouts.
+- Accessible keyboard navigation.
+- Appropriate color contrast.
+- Clear empty, loading, error, and success states.
+- UTC-based stored timestamps with localized display.
+- Time-zone-aware activity timestamps.
+- Unicode and international-character support.
+- Clear language and units.
+- No dependence on a specific institution or country.
+- Clear data access and licensing information.
+- Exportable projects to reduce lock-in.
+- Graceful degradation when a provider API is unavailable.
+- No fabricated content in empty states or fallback modes.
+
+Do not promise institutional integrations, unlimited execution, or universal data access unless implemented.
+
+---
+
+# 14. SECURITY, PRIVACY, AND RELIABILITY
+
+Implement:
+
+- Secure server-side secret handling.
+- Authentication and authorization.
+- Project ownership enforcement.
+- Input validation.
+- API rate limiting where appropriate.
+- Upload size and type restrictions.
+- Safe error responses.
+- Secure execution isolation.
+- Explicit external-sharing permissions.
+- Data export and deletion workflows.
+- Dependency and configuration checks.
+- Basic security tests.
+
+Do not expose Gemini API keys, database credentials, or privileged provider tokens in client code.
+
+Do not send a user's private project or dataset to external providers without making the data flow clear and obtaining the appropriate consent.
+
+For any service requiring API credentials, create a documented configuration screen or environment-variable setup guide. Never embed fake credentials.
+
+---
+
+# 15. TESTING AND DEFINITION OF DONE
+
+Do not declare the application finished merely because the preview loads.
+
+Implement automated tests and run them where the environment supports it.
+
+Test at least:
+
+1. User sign-in and sign-out.
+2. Project creation, editing, deletion, and persistence.
+3. Isolation between two different user accounts.
+4. Literature retrieval and source metadata handling.
+5. Duplicate-source handling.
+6. Evidence extraction with unsupported claims marked uncertain.
+7. Dataset upload and schema inspection.
+8. Analysis-plan validation.
+9. Execution failure, timeout, and successful execution paths.
+10. Verification records and discrepancy reporting.
+11. Manuscript citation and result consistency.
+12. Export and recovery of a saved project.
+13. API failure and rate-limit handling.
+14. Mobile layout and keyboard navigation.
+
+Create small, clearly labeled synthetic fixtures for tests. Never mix synthetic test results with actual scientific findings.
+
+Report test results accurately.
+
+If something has not been tested, say so. If a real external service requires credentials or deployment configuration, explain exactly what remains.
+
+---
+
+# 16. IMPLEMENTATION STRATEGY
+
+Build in coherent phases while keeping the architecture integrated.
+
+Phase 1:
+- Application shell.
+- Visual design system.
+- Authentication.
+- Persistent projects.
+- Research workspace.
+- Autosave and project history.
+
+Phase 2:
+- Literature connectors.
+- Source records.
+- Evidence matrix.
+- Candidate research-gap analysis.
+
+Phase 3:
+- Dataset upload and discovery.
+- Dataset inspection.
+- Feasibility reports.
+- Structured methods planning.
+
+Phase 4:
+- Isolated Python execution.
+- Job lifecycle.
+- Validation checks.
+- Results and discrepancy reports.
+
+Phase 5:
+- Research Decision Graph.
+- Dependency tracking.
+- Manuscript generation.
+- Citation integrity.
+- Project export.
+
+Phase 6:
+- Integration tests.
+- Security checks.
+- Accessibility and responsive design.
+- Performance improvements.
+- Deployment configuration.
+- Documentation.
+
+Do not stop after Phase 1 and describe the entire product as complete.
+
+Do not generate all modules as disconnected mockups. Each module must use the same project identity, data model, permission system, and research history.
+
+If the build environment cannot finish all phases in one pass, complete Phase 1, then continue implementing subsequent phases in order. Preserve existing functionality and test it after each significant change.
+
+---
+
+# 17. REQUIRED PROJECT DOCUMENTATION
+
+Generate and maintain:
+
+- README with setup, architecture, and local development instructions.
+- Environment-variable example file with placeholders only.
+- Database schema and security rules.
+- API and integration documentation.
+- Research workflow documentation.
+- Execution sandbox setup instructions.
+- Deployment instructions for Cloud Run and Firebase.
+- Test instructions and current test results.
+- Known limitations and unimplemented features.
+- Cost and API quota considerations.
+- A concise list of manual setup steps still required.
+
+Do not expose secret values in documentation.
+
+---
+
+# 18. FINAL QUALITY BAR
+
+The finished product must feel like one coherent application.
+
+Prioritize a polished research workspace over flashy marketing visuals.
+
+The main user journey must work from project creation through evidence collection, planning, execution where configured, validation, manuscript development, and project export.
+
+Every visible control must have a meaningful implemented action or be clearly disabled with an explanation.
+
+Never use fake data to simulate a completed workflow in production mode.
+
+Never claim a feature works unless its implementation has been verified.
+
+Never claim ProbePeer is scientifically validated or novel without independent evidence.
+
+Begin by inspecting the current environment and generating the full project structure. Implement the application, connect the required services, run available tests, inspect the UI, fix integration problems, and continue until the defined functionality is implemented or a concrete external dependency prevents completion.
+
+At the end, provide:
+1. A summary of implemented features.
+2. The technology stack actually used.
+3. Tests executed and their actual results.
+4. External credentials and setup still required.
+5. Deployment instructions.
+6. Known limitations.
+7. A prioritized list of remaining tasks.
+
+The objective is a real, maintainable, deployable research product—not a convincing prototype.
