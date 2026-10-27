@@ -1,116 +1,175 @@
-# ProbePeer — Scientific Research Workspace & Decision Graph
+<div align="center">
 
-ProbePeer is an integrated, reproducible scientific research platform designed to help researchers progress from an uncertain inquiry to a defensible, empirical, and evidence-linked body of scientific work.
+# 🔬 ProbePeer
+
+### From research question to reproducible manuscript.
+
+**Every claim in your paper, traceable to the evidence behind it.**
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-probepeer.ai.studio-7B1E3A?style=for-the-badge)](https://probepeer.ai.studio)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](#-license)
+
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![Tests](https://img.shields.io/badge/tested_with-Vitest-6E9F18?logo=vitest&logoColor=white)
+
+[**Launch Live Demo**](https://probepeer.ai.studio) · [**Quick Start**](#-quick-start) · [**How It Works**](#-how-it-works) · [**Limitations**](#️-known-limitations)
+
+</div>
 
 ---
 
-## 1. Project Overview
+## ✨ Why ProbePeer?
 
-Scientific progression requires transparent continuity: candidate research questions must be grounded in verified literature gaps, datasets must be audited for feasibility and confounding risks, analysis plans must be frozen to prevent post-hoc $p$-hacking/HARKing, computational execution must audit diagnostic assertions, and manuscript claims must link directly to underlying evidence.
+Most research workflows are scattered across browser tabs, notebooks, spreadsheets, and word processors. By the time a manuscript is written, the link between the **original question**, the **analysis actually run**, and the **numbers actually reported** can be hard to audit, even for the author.
 
-### The Research Decision Graph
-At the center of ProbePeer is the **Research Decision Graph**, a typed, versioned network tracking scientific objects and their relationships:
-- **Node Types**: Research Questions, Hypotheses, Literature Sources, Evidence Statements, Candidate Gaps, Datasets, Variables, Analysis Protocols, Execution Runs, Quantitative Results, and Manuscript Sections.
-- **Edge Relationships**: `supports`, `contradicts`, `derived_from`, `depends_on`, `executed_as`, `validated_by`, `reported_in`.
-- **Downstream Dependency Tracer**: When an upstream dataset or method changes, ProbePeer cascades dependency warnings to all affected downstream results and manuscript sections, preventing undetected discrepancies.
+ProbePeer closes that gap. It puts literature discovery, dataset feasibility, frozen analysis plans, statistical execution, and manuscript drafting into **one structured workflow**, built on a single principle:
 
----
+> **Scientific claims should be traceable to the evidence that supports them.**
 
-## 2. Local Development Setup
+The goal isn't to write papers faster. It's to make the process behind a paper **easier to inspect, understand, and reproduce.**
 
-### Prerequisites
-- **Node.js**: v20 or v22 LTS
-- **Python**: 3.10+ (Standard library modules used: `math`, `statistics`, `csv`, `json`, `sqlite3`, `random`, `re`)
+## 👥 Who it's for
 
-### Setup Commands
+- **Students and early-career researchers** who want a disciplined workflow from day one
+- **Research groups** who want analysis decisions documented before results exist
+- **Reviewers and collaborators** who want to verify where a reported number came from
+- **Anyone** who has ever asked, "Which version of the analysis produced this table?"
+
+## 🧭 How it works
+
+```text
+Research Question
+       │
+       ▼
+Literature Discovery ········ OpenAlex / Crossref
+       │
+       ▼
+Dataset Feasibility ········· CSV inspection
+       │
+       ▼
+Frozen Analysis Plan ········ SHA-256 integrity check
+       │
+       ▼
+Python Execution Pipeline
+       │
+       ▼
+Recorded Statistical Results
+       │
+       ▼
+Evidence-Linked Manuscript
+       │
+       ▼
+Reproducibility Export (ZIP)
+```
+
+| Stage | What happens | Why it matters |
+|---|---|---|
+| **01 · Literature discovery** | Retrieves scholarly records through the OpenAlex and Crossref APIs. | Research starts from identifiable sources, not citations that merely look plausible. Human review of relevance and accuracy is still required. |
+| **02 · Dataset feasibility** | Upload a CSV and inspect structure, missingness, and statistical characteristics. | Know what your data can support *before* deciding what it appears to show. |
+| **03 · Frozen analysis plans** | Specify models and stopping conditions up front. Freezing generates a SHA-256 hash of the plan. | Pre-specified decisions make later deviations easier to spot. A hash is an integrity check; it does not by itself prevent p-hacking or prove when a plan was created. |
+| **04 · Python execution** | Runs generated Python 3 scripts via a Node.js child process with restricted environment variables and timeouts. | Results come from an identifiable computation, not from prose generation. |
+| **05 · Evidence-linked drafting** | Drafts a manuscript whose statistical results come from recorded execution outputs. | The narrative and the numbers agree, and you can inspect the underlying results. AI-generated text remains a draft that needs your review. |
+| **06 · Reproducibility export** | Exports a ZIP with data, code, checksums, and a provenance manifest. | A project should leave behind more than a final document. |
+
+## 🛡️ Built around research integrity
+
+| Principle | Implementation |
+|---|---|
+| **Source traceability** | Scholarly metadata retrieval via OpenAlex and Crossref |
+| **Methodological transparency** | Explicit statistical plans and documented stopping conditions |
+| **Analytical integrity** | SHA-256 plan-integrity checks |
+| **Computational provenance** | Recorded execution outputs linked to reported results |
+| **Portability** | Downloadable artifacts and provenance manifests |
+
+> These mechanisms support reproducible workflows. They do **not** independently guarantee scientific validity. Data quality, statistical assumptions, methodological appropriateness, and interpretation remain the researcher's responsibility.
+
+## 🧰 Technology stack
+
+| Layer | Technologies |
+|---|---|
+| Frontend | React, TypeScript, Vite |
+| Styling | Tailwind CSS (Botanical Merlot design system) |
+| Data ingestion | PapaParse |
+| Export generation | JSZip |
+| Backend | Node.js, Express |
+| Statistical execution | Python 3.10 |
+| AI integration | Gemini API |
+| Literature metadata | OpenAlex, Crossref |
+| Research data integration | Zenodo |
+| Testing | Vitest |
+
+## 🚀 Quick start
+
+**Prerequisites:** Node.js 18+, Python 3.10+, and a [Gemini API key](https://aistudio.google.com/apikey).
+
 ```bash
-# 1. Install dependencies
+# 1. Clone
+git clone https://github.com/susxmitha/ProbePeer.git
+cd ProbePeer
+
+# 2. Install dependencies
 npm install
 
-# 2. Configure environment variables (create .env from .env.example)
-cp .env.example .env
+# 3. Configure environment
+echo "GEMINI_API_KEY=your_gemini_api_key_here" > .env
+echo "PORT=3000" >> .env
 
-# 3. Start development server (Full-stack Express + Vite on port 3000)
+# 4. Run
 npm run dev
-
-# 4. Open in browser
-# http://localhost:3000
 ```
 
-### Verification & Testing
+Then open `http://localhost:3000`.
+
+### Run the tests
+
 ```bash
-# Type check and lint check
-npm run lint
-
-# Production bundle compilation
-npm run build
+npm run test
 ```
+
+The Vitest suite covers statistical validation and utility functions.
+
+## ⚠️ Known limitations
+
+Honest engineering means saying what the tool does *not* do yet.
+
+- **Execution sandbox:** The Python pipeline relies on a Node.js child process with restricted environment variables and timeouts. For public, multi-tenant deployments with untrusted input, migrate this boundary to a hardened sandbox such as gVisor or Google Cloud Run Jobs.
+- **Synthetic benchmark:** The default 300-row cohort is synthetic. The pipeline processes it like real data, but results must not be interpreted as clinical conclusions.
+- **API constraints:** Live literature searches are subject to OpenAlex and Crossref rate limits. The app handles rate-limited requests gracefully.
+- **AI-assisted drafting:** Generated manuscript text is a starting point. Interpretation, citations, and conclusions require researcher review.
+
+## 🗺️ Roadmap
+
+- [ ] Hardened sandbox for multi-tenant execution
+- [ ] Additional statistical model templates
+- [ ] Support for more dataset formats beyond CSV
+- [ ] Citation-verification checks against retrieved metadata
+- [ ] Exportable plan-and-results audit report
+
+## 🤝 Contributing
+
+Contributions, issues, and ideas are welcome.
+
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit your changes and run `npm run test`
+4. Open a pull request describing what you changed and why
+
+Found a bug or have a feature idea? [Open an issue](https://github.com/susxmitha/ProbePeer/issues).
+
+## 📄 License
+
+Released under the [MIT License](LICENSE).
 
 ---
 
-## 3. Production Deployment Instructions
+<div align="center">
 
-### Google Cloud Run Deployment
-ProbePeer is configured as a full-stack containerized service. In production, Node.js serves both API endpoints and the compiled Vite static assets from `/dist`.
+**If ProbePeer helps your research, consider giving it a ⭐**
 
-1. **Build Container & Deploy to Cloud Run**:
-```bash
-# Build the production bundle
-npm run build
+*Make the process behind your paper as trustworthy as the paper itself.*
 
-# Deploy via gcloud CLI
-gcloud run deploy probepeer \
-  --source . \
-  --platform managed \
-  --region asia-northeast1 \
-  --allow-unauthenticated \
-  --set-env-vars "NODE_ENV=production,PORT=8080"
-```
-*Note*: Cloud Run injects `$PORT` dynamically. `server.ts` automatically binds to `process.env.PORT || 3000`.
-
-2. **Configure Gemini API Key**:
-Set the `GEMINI_API_KEY` secret in Cloud Run environment variables or Google Secret Manager:
-```bash
-gcloud run services update probepeer \
-  --set-secrets "GEMINI_API_KEY=GEMINI_API_KEY:latest"
-```
-
-### Firebase App Hosting / Hosting
-1. Build client bundle: `npm run build`.
-2. Connect backend Cloud Functions or Cloud Run service handling `/api/*` routes.
-3. Deploy frontend static assets from `dist/` with SPA rewrite rules to `index.html`.
-
----
-
-## 4. Known Limitations & Real vs. Simulated Capabilities
-
-To ensure complete scientific honesty and transparency:
-
-| Feature / Subsystem | Current Implementation Status | Operational Boundaries |
-|---|---|---|
-| **Scholarly Literature Retrieval** | **REAL** | Queries live **OpenAlex**, **Crossref REST**, and **arXiv** APIs with automatic DOI deduplication. Handles HTTP 429 rate limits gracefully. |
-| **Evidence Extraction & Gaps** | **REAL** | Synthesizes evidence strictly from retrieved abstracts using Gemini 2.5 Flash. LLM is strictly constrained from inventing DOIs. |
-| **Dataset Statistical Profiling** | **REAL** | Parses RFC 4180 CSV files using PapaParse. Computes exact row counts, column types, missingness, duplicates, means, std deviations, and leakage warnings dynamically. |
-| **Feasibility Assessment** | **REAL** | Dynamically analyzes dataset sample size power, continuous vs. categorical features, detected confounders, and outputs exact supported vs. unsupported claims. |
-| **Python Execution Runner** | **REAL** | Executes in an isolated child process using the system's **Python 3.10** runtime with strict timeout guards (15s) and memory constraints. Computes real Pearson $r$, regression slopes, confidence intervals, and dynamic SVG scatterplots from dataset rows. |
-| **Third-Party Python Libraries** | **LIMITATION** | Python standard library (`math`, `statistics`, `csv`, `json`) is native in the host environment. Heavy third-party packages (`torch`, `biopython`, `statsmodels`) require connecting a dedicated containerized worker (e.g. Celery / Ray / Cloud Run Jobs). |
-| **Data Persistence** | **REAL** | Dual-tier persistence: instant synchronous `localStorage` caching paired with atomic server JSON store (`/data/projects.json`), preserving active project and view across browser reloads. |
-| **Project Artifact Export** | **REAL** | Generates standard `.zip` archive containing `analysis_script.py`, `dataset.csv`, `execution_results.json`, `manuscript.md`, and `decision_graph.json` via JSZip. |
-
----
-
-## 5. Environment Variables (`.env.example`)
-
-```bash
-# GEMINI_API_KEY: Server-side Gemini AI key (automatically injected in AI Studio)
-GEMINI_API_KEY="your-gemini-api-key"
-
-# PORT: Server listening port (defaults to 3000, overridden by Cloud Run $PORT)
-PORT=3000
-
-# NODE_ENV: Set to "production" in deployed instances
-NODE_ENV="production"
-
-# APP_URL: Base URL of hosted applet
-APP_URL="http://localhost:3000"
-```
+</div>
