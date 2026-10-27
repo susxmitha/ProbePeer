@@ -136,7 +136,7 @@ The Vitest suite covers statistical validation and utility functions.
 
 Honest engineering means saying what the tool does *not* do yet.
 
-- **Execution sandbox:** The Python pipeline relies on a Node.js child process with restricted environment variables and timeouts. For public, multi-tenant deployments with untrusted input, migrate this boundary to a hardened sandbox such as gVisor or Google Cloud Run Jobs.
+- **Execution sandbox:** The live demo on AI Studio uses a JavaScript fallback engine for statistical computation because the preview environment lacks Python. The full Python 3.10 pipeline can be deployed via the included Dockerfile.
 - **Synthetic benchmark:** The default 300-row cohort is synthetic. The pipeline processes it like real data, but results must not be interpreted as clinical conclusions.
 - **API constraints:** Live literature searches are subject to OpenAlex and Crossref rate limits. The app handles rate-limited requests gracefully.
 - **AI-assisted drafting:** Generated manuscript text is a starting point. Interpretation, citations, and conclusions require researcher review.
