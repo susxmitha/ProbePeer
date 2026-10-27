@@ -170,6 +170,7 @@ export interface ExecutionRun {
   tables: { title: string; columns: string[]; rows: any[][] }[];
   plots: { title: string; svg?: string; svgData?: string }[];
   plan_version_id?: string;
+  executionEngine?: 'python' | 'javascript';
 }
 
 export type GraphNodeType = 

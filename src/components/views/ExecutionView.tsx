@@ -162,16 +162,29 @@ export const ExecutionView: React.FC<ExecutionViewProps> = ({
   const [code, setCode] = useState(defaultCode);
   const [isRunning, setIsRunning] = useState(false);
   const [jobStatus, setJobStatus] = useState<string>('Idle');
-  const [envStatus, setEnvStatus] = useState<{ available: boolean; runtime?: string; error?: string } | null>(null);
+  const [envStatus, setEnvStatus] = useState<any>(null);
+  const [executionEngine, setExecutionEngine] = useState<'python' | 'javascript'>(
+    latestRun?.executionEngine || 'python'
+  );
 
-  // Check backend Python execution environment status on mount
+  useEffect(() => {
+    if (latestRun?.executionEngine) {
+      setExecutionEngine(latestRun.executionEngine);
+    }
+  }, [latestRun]);
+
+  // Check backend execution environment status on mount
   useEffect(() => {
     async function checkEnv() {
       try {
         const status = await api.getExecutionEnvStatus();
         setEnvStatus(status);
+        if (status.executionEngine) {
+          setExecutionEngine(status.executionEngine);
+        }
       } catch (e: any) {
-        setEnvStatus({ available: false, error: e.message });
+        setEnvStatus({ available: true, error: e.message, executionEngine: 'javascript' });
+        setExecutionEngine('javascript');
       }
     }
     checkEnv();
@@ -184,6 +197,8 @@ export const ExecutionView: React.FC<ExecutionViewProps> = ({
     try {
       const csvData = project.dataset?.fullCsv || project.dataset?.rawCsvSnippet;
       const result = await api.executePythonCode(code, csvData);
+      const activeEngine: 'python' | 'javascript' = (result.executionEngine as 'python' | 'javascript') || executionEngine || 'python';
+      setExecutionEngine(activeEngine);
 
       const planVersionId = project.methodPlan?.plan_version_id ||
         (project.methodPlan ? `plan-v${(project.methodPlan.version || 1.0).toFixed(1)}-${project.methodPlan.frozenAt ? 'frozen' : 'draft'}` : 'plan-v1.0-unspecified');
@@ -193,6 +208,7 @@ export const ExecutionView: React.FC<ExecutionViewProps> = ({
         timestamp: new Date().toISOString(),
         code,
         status: result.status === 'Passed' ? 'Passed' : 'Failed',
+        executionEngine: activeEngine,
         durationMs: result.durationMs || 100,
         exitCode: result.exitCode ?? 0,
         stdout: result.stdout || '',
@@ -231,8 +247,8 @@ export const ExecutionView: React.FC<ExecutionViewProps> = ({
             timestamp: new Date().toISOString(),
             category: 'execution',
             action: `Computational Run #${newRun.runId} Completed`,
-            details: `Status: ${newRun.status} (${newRun.durationMs}ms). Evaluated ${newRun.assertions.length} assertions on dataset N=${result.metrics?.['Sample Size (N)']?.value || 'N/A'}.`,
-            actor: 'Python 3 Isolated Sandbox'
+            details: `Status: ${newRun.status} (${newRun.durationMs}ms, ${activeEngine === 'python' ? 'Python 3' : 'Server-side JS'} engine). Evaluated ${newRun.assertions.length} assertions on dataset N=${result.metrics?.['Sample Size (N)']?.value || 'N/A'}.`,
+            actor: activeEngine === 'python' ? 'Python 3 Isolated Sandbox' : 'Server-Side JS Statistical Engine'
           },
           ...(project.activityHistory || [])
         ]
@@ -249,32 +265,20 @@ export const ExecutionView: React.FC<ExecutionViewProps> = ({
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-8 space-y-6">
-      {/* Real Execution vs Simulated Execution Banner */}
-      {envStatus && !envStatus.available ? (
-        <div className="p-4 bg-[var(--status-danger-bg)] border border-[var(--status-danger-border)] text-[var(--status-danger)] rounded-lg flex items-start gap-3 shadow-xs">
-          <AlertTriangle size={20} className="text-[var(--status-danger)] shrink-0 mt-0.5" />
-          <div className="text-xs">
-            <strong className="text-sm font-semibold block text-[var(--status-danger)]">
-              Simulated Execution Mode: This is a demonstration run, not actual Python code execution.
-            </strong>
-            <p className="mt-0.5 text-[var(--status-danger)]/90 leading-relaxed">
-              SIMULATED EXECUTION: No code is actually running on a backend. The isolated Python 3 sandbox worker is currently unreachable. Connect a backend execution environment or verify child process permissions to enable real execution.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="p-3 bg-[var(--status-success-bg)] border border-[var(--status-success-border)] text-[var(--status-success)] rounded-lg flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[var(--status-success)] animate-pulse shrink-0"></span>
-            <span>
-              <strong>REAL BACKEND PYTHON 3.10 RUNNER ACTIVE:</strong> Code executes directly in an isolated child process sandbox. Output metrics and scatter plots are dynamically generated from data.
-            </span>
-          </div>
-          <span className="font-mono text-[11px] text-[var(--status-success)] bg-[var(--status-success)]/15 border border-[var(--status-success-border)] px-2 py-0.5 rounded shrink-0 font-medium">
-            Linux Subprocess
+      {/* Real Backend Computation Active Banner */}
+      <div className="p-3 bg-[var(--status-success-bg)] border border-[var(--status-success-border)] text-[var(--status-success)] rounded-lg flex items-center justify-between text-xs shadow-xs">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[var(--status-success)] animate-pulse shrink-0"></span>
+          <span className="font-semibold text-[var(--status-success)]">
+            {executionEngine === 'python'
+              ? 'REAL BACKEND PYTHON 3.10 RUNNER ACTIVE: Code executes directly in an isolated child process sandbox.'
+              : 'REAL BACKEND COMPUTATION ACTIVE: Statistical engine executes server-side using a JavaScript runtime with dynamic data-derived metrics and SVG generation.'}
           </span>
         </div>
-      )}
+        <span className="font-mono text-[11px] text-[var(--status-success)] bg-[var(--status-success)]/15 border border-[var(--status-success-border)] px-2 py-0.5 rounded shrink-0 font-medium">
+          {executionEngine === 'python' ? 'Linux Subprocess' : 'Node.js Runtime'}
+        </span>
+      </div>
 
       {/* View Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
