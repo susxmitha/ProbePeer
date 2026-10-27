@@ -22,6 +22,22 @@
 
 ---
 
+## 📸 Screenshots
+
+### Execution & Verification
+![Execution Scatterplot](<img width="1600" height="888" alt="image" src="https://github.com/user-attachments/assets/e2fe6827-71db-4259-920f-9f3653d6a09a" />
+)
+
+### Research Decision Graph
+![Decision Graph](<img width="1475" height="820" alt="image" src="https://github.com/user-attachments/assets/3d26449c-2437-4374-a6e3-d6a78a6b506b" />
+)
+
+### Evidence-Linked Manuscript
+![Manuscript](<img width="1474" height="821" alt="image" src="https://github.com/user-attachments/assets/551e5e26-2dad-46f0-b016-e9dbad8fdf50" />
+)
+
+---
+
 ## ✨ Why ProbePeer?
 
 Most research workflows are scattered across browser tabs, notebooks, spreadsheets, and word processors. By the time a manuscript is written, the link between the **original question**, the **analysis actually run**, and the **numbers actually reported** can be hard to audit, even for the author.
